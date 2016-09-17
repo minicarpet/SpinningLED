@@ -4,4 +4,6 @@
 
 Use led RGB with PWM pins
 
-And processing to get the color
+Arduino run all Hue color (from HSV to RGB)
+
+And processing to moitoring the color
