@@ -3,7 +3,7 @@
 class rgbImproved {
   public:
     rgbImproved(int pinRed, int pinGreen, int pinBlue);
-    void changeBrightness(unsigned char val);
+    void setBrightness(unsigned char val);
     unsigned char getBrightness();
     void apply(rgb values);
     void apply(int val);

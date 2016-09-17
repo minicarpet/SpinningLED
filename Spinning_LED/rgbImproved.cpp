@@ -24,12 +24,12 @@ g_out=map(color_index, 170, 255, 0, 255);
 b_out=map(color_index, 170, 255, 255, 0);
 }
 
-rgb test;
-test.r=r_out;
-test.g=g_out;
-test.b=b_out;
+rgb out;
+out.r=r_out;
+out.g=g_out;
+out.b=b_out;
 
-return test; 
+return out; 
 }
 
 rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) {
@@ -39,7 +39,7 @@ rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) {
   apply(LED);
 }
 
-void rgbImproved::changeBrightness(unsigned char val) {
+void rgbImproved::setBrightness(unsigned char val) {
   brightness = constrain(val, 0, 255);
 }
 
