@@ -18,6 +18,8 @@ BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); /* instantiation 
 
 BLECharacteristic ledChar("19B10001-E8F2-537E-4F6C-D104768A1214", BLEWrite, 20); /* instantiation des characteristique */
 
+bool autoMode = true; /* Booleen pour differencier les modes : Future use */
+
 rgbImproved led(9, 6, 3);
 
 void setup() {
