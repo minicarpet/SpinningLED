@@ -1,3 +1,8 @@
+/*
+ * Librairie led RGB
+ * Update : 17.09.16
+ */
+
 #include "declaration.h"
 
 class rgbImproved {

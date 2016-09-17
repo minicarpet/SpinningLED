@@ -1,3 +1,7 @@
+/*
+ * Declaration publique
+ * Update : 17.09.16
+ */
 #include "Arduino.h"
 
 typedef struct{

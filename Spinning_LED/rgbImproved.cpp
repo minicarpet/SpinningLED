@@ -1,3 +1,8 @@
+/*
+ * Declaration des fonctions de la librairie
+ * Update : 17.09.16
+ */
+
 #include "rgbImproved.h"
 
 rgb color_map(int color_index) {
@@ -32,33 +37,34 @@ out.b=b_out;
 return out; 
 }
 
-rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) {
+rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) { /* Initialisation de la classe */
   _pinRed = pinRed;
   _pinGreen = pinGreen;
   _pinBlue = pinBlue;
   apply(LED);
 }
 
-void rgbImproved::setBrightness(unsigned char val) {
+void rgbImproved::setBrightness(unsigned char val) { /* Modification de la luminosite de la LED */
   brightness = constrain(val, 0, 255);
+  apply(LED);
 }
 
-unsigned char rgbImproved::getBrightness() {
+unsigned char rgbImproved::getBrightness() { /* Recuperation de la luminosite de la LED */
   return brightness;
 }
 
-void rgbImproved::apply(rgb values) {
+void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
   LED = values;
   analogWrite(_pinRed, LED.r/(256-brightness));
   analogWrite(_pinGreen, LED.g/(256-brightness));
   analogWrite(_pinBlue, LED.b/(256-brightness));
 }
 
-void rgbImproved::apply(int val) {
+void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
   apply(color_map(val));
 }
 
-rgb rgbImproved::getColor() {
+rgb rgbImproved::getColor() { /* Recuperation des couleurs RGB */
   return LED;
 }
 
