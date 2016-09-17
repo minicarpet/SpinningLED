@@ -30,15 +30,6 @@ void setup() {
   #endif
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
-  blePeripheral.setLocalName("LEDCB"); /* Initialisation du BLE */
-  blePeripheral.setDeviceName("SpinningLED");
-  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
-  blePeripheral.addAttribute(ledService);
-  blePeripheral.addAttribute(ledChar);
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-  ledChar.setEventHandler(BLEWritten, ledCharacteristicWritten);
-  blePeripheral.begin(); /* Demarrage du BLE */
   led.setBrightness(10); /* Par defaut : 255 (max) */
 
 }
@@ -64,6 +55,18 @@ void loop() {
 /*
  * Gestion du BLE
  */
+
+void initBLE() {
+  blePeripheral.setLocalName("LEDCB"); /* Initialisation du BLE */
+  blePeripheral.setDeviceName("SpinningLED");
+  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+  blePeripheral.addAttribute(ledService);
+  blePeripheral.addAttribute(ledChar);
+  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  ledChar.setEventHandler(BLEWritten, ledCharacteristicWritten);
+  blePeripheral.begin(); /* Demarrage du BLE */
+}
 
 void blePeripheralConnectHandler(BLECentral& central) {
   // central connected event handler

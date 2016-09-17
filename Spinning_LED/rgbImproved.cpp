@@ -22,14 +22,16 @@ unsigned char rgbImproved::getBrightness() { /* Recuperation de la luminosite de
 }
 
 void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
-  LED = values;
+  LED.r = values.r*(brightness/255.0);
+  LED.g = values.g*(brightness/255.0);
+  LED.b = values.b*(brightness/255.0);
   analogWrite(_pinRed, LED.r);
   analogWrite(_pinGreen, LED.g);
   analogWrite(_pinBlue, LED.b);
 }
 
 void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
-  apply(color_map(val));
+  color_map(val);
 }
 
 rgb rgbImproved::getColor() { /* Recuperation des couleurs RGB */
@@ -69,7 +71,9 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   out.g = out.g*(brightness/255.0);
   out.b = out.b*(brightness/255.0);
 
-  LED = out;
+  analogWrite(_pinRed, out.r);
+  analogWrite(_pinGreen, out.g);
+  analogWrite(_pinBlue, out.b);
   
   return out; 
 }
