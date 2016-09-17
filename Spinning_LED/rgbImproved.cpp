@@ -5,7 +5,7 @@
 
 #include "rgbImproved.h"
 
-rgb color_map(int color_index) {
+rgb color_map(int color_index) { /* Fonction de PY : couleur Hue (de HSV) */
 
 int r_out=0;
 int g_out=0;
