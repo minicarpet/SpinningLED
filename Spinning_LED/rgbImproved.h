@@ -19,5 +19,6 @@ class rgbImproved {
     int _pinBlue;
     unsigned char brightness = 255;
     rgb LED;
+    rgb color_map(int color_index);
     color chose = red;
 };
