@@ -74,6 +74,8 @@ void mouseClicked() {
   sa.background(0, 0, 255);
   sa.fill(100);
   sa.redraw();
+  background(0, 0, 255);
+  redraw();
 }
    
 void serialEvent (Serial myPort) {
@@ -116,5 +118,11 @@ public class SecondApplet extends PApplet {
   }
   public void draw() {
     
+  }
+  
+  public void mouseClicked() {
+    print("clicked2");
+    background(0, 255, 0);
+    redraw();
   }
 }
