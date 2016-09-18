@@ -12,6 +12,27 @@ rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) { /* Initialisat
   apply(LED);
 }
 
+/*
+ * Mettre a 1 pour allumer la LED et a 0 pour l'eteindre
+ * Il est aussi possible d'eteindre la led en mettant la luminosite a 0
+ * Ou encore en appliquant 0, 0, 0 a la LED avec apply
+ * 
+ * Si la LED est ON, les valeur RGB peuvent toujours etre modifier ! Cependant
+ * lorsque setOn est appeler pour eteindre la LED, les valeurs RGB sont
+ * renitialiser a 0
+ */
+void rgbImproved::setOn(bool on) { /* Set On/Off de la LED */
+  if(!on) {
+    apply(0, 0, 0);
+  }
+  _on = on;
+  apply(LED);
+}
+
+bool rgbImproved::getOn() { /* Get On/Off de la LED */
+  return _on;
+}
+
 void rgbImproved::setBrightness(unsigned char val) { /* Modification de la luminosite de la LED */
   brightness = constrain(val, 0, 255);
   apply(LED);
@@ -21,10 +42,21 @@ unsigned char rgbImproved::getBrightness() { /* Recuperation de la luminosite de
   return brightness;
 }
 
+void rgbImproved::apply(int r, int g, int b) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
+  LED.r = r*(brightness/255.0);
+  LED.g = g*(brightness/255.0);
+  LED.b = b*(brightness/255.0);
+  if(!_on) { return;}
+  analogWrite(_pinRed, LED.r);
+  analogWrite(_pinGreen, LED.g);
+  analogWrite(_pinBlue, LED.b);
+}
+
 void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
   LED.r = values.r*(brightness/255.0);
   LED.g = values.g*(brightness/255.0);
   LED.b = values.b*(brightness/255.0);
+  if(!_on) { return;}
   analogWrite(_pinRed, LED.r);
   analogWrite(_pinGreen, LED.g);
   analogWrite(_pinBlue, LED.b);
@@ -70,6 +102,10 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   out.r = out.r*(brightness/255.0);
   out.g = out.g*(brightness/255.0);
   out.b = out.b*(brightness/255.0);
+
+  LED = out;
+
+  if(!_on) { return LED;}
 
   analogWrite(_pinRed, out.r);
   analogWrite(_pinGreen, out.g);

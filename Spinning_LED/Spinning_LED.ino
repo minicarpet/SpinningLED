@@ -16,13 +16,16 @@
 #include "rgbImproved.h" /* Librairie d'utilisation d'une LED RGB */
 #include <CurieBLE.h> /* Module BLE a modifier pour la carte ADA */
 
-//#define Monitoring /* Active le monitoring en decommentant cette ligne */
+#define Monitoring /* Active le monitoring en decommentant cette ligne */
 
 BLEPeripheral blePeripheral; /* instantiation du module BLE */
 
 BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); /* instantiation des services */
 
 BLECharacteristic ledChar("19B10001-E8F2-537E-4F6C-D104768A1214", BLEWrite, 20); /* instantiation des characteristique */
+
+unsigned long int timeout = 10000;
+unsigned long int Time = 10000;
 
 bool autoMode = true; /* Booleen pour differencier les modes : Future use */
 
@@ -32,7 +35,13 @@ void setup() {
   // put your setup code here, to run once:
   #ifdef Monitoring
   Serial.begin(115200);
-  while(!Serial);
+  Time = millis();
+  while(!Serial) {
+    if(millis() - Time > timeout) {
+      break;
+    }
+  }
+  Serial.println("Monitoring on");
   #endif
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
@@ -42,7 +51,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for(int i=0 ; i<256 ; i++) { /* Test de toutes les valeurs possible en boucle en utilisant le fonction de PY */
+  for(int i=0 ; i<255 ; i++) { /* Test de toutes les valeurs possible en boucle en utilisant le fonction de PY */
     #ifdef Monitoring
     Serial.print(led.getColor().r);
     Serial.print(",");
@@ -55,7 +64,7 @@ void loop() {
     led.apply(i);
     delay(20);
   }
-
+  led.setOn(!led.getOn());
 }
 
 /*
