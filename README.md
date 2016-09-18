@@ -6,4 +6,4 @@ Use led RGB with PWM pins
 
 Arduino run all Hue color (from HSV to RGB)
 
-And processing to moitoring the color
+And processing to monitoring the color
