@@ -1,11 +1,17 @@
-// 25.08.2016 -- RGB spinning LED ball
-// Pierre-Yves Bloqueau/Logan Gallois (jte beze)
-//----Etat d'avancement: x- fait o- à faire
-// o-lien entre appli android et arduino
-//  o- distinction entre mode auto et manuel
-//    o-codage mode auto
-//      x- Look up-table: 1int-->3int rgb 
-//    o-codage mode manuel
+/* 25.08.2016 -- RGB spinning LED ball
+ * Pierre-Yves Bloqueau/Logan Gallois (jte beze)
+ * ----Etat d'avancement: x- fait o- à faire
+ * o-lien entre appli android et arduino
+ *  o- distinction entre mode auto et manuel
+ *    o-codage mode auto
+ *      x- Look up-table: 1int-->3int rgb
+ *      o-fonction de transition mot
+ *      o-fonction de transition color
+ *    o-codage mode manuel moteur
+ *    o-codage mode manuel led
+ *    o-codage mode manuel full
+ *    o-codage enregistrement mode
+ */
 
 #include "rgbImproved.h" /* Librairie d'utilisation d'une LED RGB */
 #include <CurieBLE.h> /* Module BLE a modifier pour la carte ADA */
@@ -30,7 +36,7 @@ void setup() {
   #endif
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
-  led.setBrightness(10); /* Par defaut : 255 (max) */
+  led.setBrightness(100); /* Par defaut : 255 (max) */
 
 }
 
