@@ -3,37 +3,39 @@
 *  future imporvement :
 *  Add autoDetect position to move windows at the good location
 */
-
-import controlP5.*;
 import processing.serial.*;
 Serial myPort;
 SecondApplet sa;
-
-ControlP5 cp5;
-DropdownList p1;
  
 boolean flag = false;
 float var1;
 float var2;
 float var3;
 float var4;
-PApplet test;
  
 void setup() {
   size(1024, 576); //Affiche en plein écran
   surface.setResizable(false);
   noStroke();
-  test = this;
-  cp5 = new ControlP5(this);
-  p1 = cp5.addDropdownList("USB detected")
-          .setPosition(0, 0)
-          ;
-  for(int i = 0 ; i<Serial.list().length ; i++) {
-    p1.addItem(Serial.list()[i], i);
+  println(Serial.list()); /* Verifier dans la liste ou se trouve l'arduino */
+  /* Puis changer en dessous la valeur en fonction */
+  /* En general 0 pour windows et 1 pour un mac */
+  String os=System.getProperty("os.name"); /* Detection automatique de l'OS */
+  print("Running OS : ");
+  println(os);
+  if(!os.equals("Mac OS X")) {
+    print("Connect with : ");
+    println(Serial.list()[0]);
+    if(Serial.list().length > 0) {
+      myPort = new Serial(this, Serial.list()[0], 115200);
+    }
+  } else {
+    print("Connect with : ");
+    println(Serial.list()[1]);
+    if(Serial.list().length > 1) { /* Module BLE en position 0 */
+      myPort = new Serial(this, Serial.list()[1], 115200);
+    }
   }
-  p1.changeValue(1.0);
-  p1.close();
-  delay(100);
   //Important : se câler sur la valeur en baud du prog Arduino
   String[] args = {"TwoFrameTest"};
   sa = new SecondApplet();
@@ -47,42 +49,6 @@ void draw() {
     flag = true;
   }
   background(color(constrain(int(var1),0,255), constrain(int(var2),0,255), constrain(int(var3),0,255)));
-}
-
-void mouseClicked() {
-  for(int i = 0 ; i<p1.getItems().size() ; i++) {
-    p1.changeValue(i);
-    println(p1.getStringValue());
-    p1.removeItem(p1.getStringValue());
-  }
-  for(int i = 0 ; i<Serial.list().length ; i++) {
-    p1.addItem(Serial.list()[i], i);
-  }
-}
-
-void customize(DropdownList ddl) {
-  ddl.setBackgroundColor(20);
-  ddl.setItemHeight(40);
-  ddl.setBarHeight(20);
-}
-
-void controlEvent(ControlEvent theEvent) {
-  // DropdownList is of type ControlGroup.
-  // A controlEvent will be triggered from inside the ControlGroup class.
-  // therefore you need to check the originator of the Event with
-  // if (theEvent.isGroup())
-  // to avoid an error message thrown by controlP5.
-
-  if (theEvent.isGroup()) {
-    // check if the Event was triggered from a ControlGroup
-  } 
-  else if (theEvent.isController()) {
-    myPort.stop();
-    myPort.clear();
-    myPort = new Serial(this, Serial.list()[int(theEvent.getController().getValue())], 115200);
-    myPort.bufferUntil('\n');
-    //p1.setColorActive(100);
-  }
 }
    
 void serialEvent (Serial myPort) {
