@@ -1,7 +1,6 @@
 /*
 *  17.09.16 : Logan Gallois
 *  future imporvement :
-*  Windows print graph of PWMs values from RGB LED
 *  Add autoDetect position to move windows at the good location
 */
 

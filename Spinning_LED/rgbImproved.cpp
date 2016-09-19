@@ -5,7 +5,7 @@
 
 #include "rgbImproved.h"
 
-rgbImproved::rgbImproved(int pinRed, int pinGreen, int pinBlue) { /* Initialisation de la classe */
+rgbImproved::rgbImproved(unsigned char pinRed, unsigned char pinGreen, unsigned char pinBlue) { /* Initialisation de la classe */
   _pinRed = pinRed;
   _pinGreen = pinGreen;
   _pinBlue = pinBlue;
@@ -63,7 +63,13 @@ void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED 
 }
 
 void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
+  lastColor = val;
   color_map(val);
+}
+
+void rgbImproved::applySmooth(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
+  //MET TA FONCTION SMOOTH POUR LE CHANGEMENT DE COULEUR ICI ENCULER
+  //TU PEUX UTILISER LA VARIABLE lastColor QUI ENREGISTRE LA DERNIERE VALEUR UTILISE
 }
 
 rgb rgbImproved::getColor() { /* Recuperation des couleurs RGB */
