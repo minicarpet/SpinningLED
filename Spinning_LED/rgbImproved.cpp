@@ -97,13 +97,13 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   } else if (color_index >=127 && color_index<170) {
     r_out=0;
     g_out=map(color_index, 127, 170, 255, 0);
-    b_out=1;
+    b_out=255;
   } else if (color_index >=170 && color_index<212) {
     r_out=map(color_index, 170, 212, 0, 255);
     g_out=0;
-    b_out=1;
-  } else if (color_index >=170 && color_index<255) {
-    r_out=1;
+    b_out=255;
+  } else if (color_index >=170 && color_index<=255) {
+    r_out=255;
     g_out=0;
     b_out=map(color_index, 212, 255, 255, 0);
   }

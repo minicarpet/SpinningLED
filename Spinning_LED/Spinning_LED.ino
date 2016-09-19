@@ -51,21 +51,30 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for(int i=0 ; i<255 ; i++) { /* Test de toutes les valeurs possible en boucle en utilisant le fonction de PY */
+  for(int i=0 ; i<256 ; i++) { /* Test de toutes les valeurs possible en boucle en utilisant le fonction de PY */
     #ifdef Monitoring
-    Serial.print(led.getColor().r);
-    Serial.print(",");
-    Serial.print(led.getColor().g);
-    Serial.print(",");
-    Serial.print(led.getColor().b);
-    Serial.print(",");
-    Serial.println(led.getBrightness());
+    sendMonitoring();
     #endif
     led.apply(i);
     delay(20);
   }
-  led.setOn(!led.getOn());
+  //led.setOn(!led.getOn());
 }
+
+
+
+
+#ifdef Monitoring
+void sendMonitoring() {
+  Serial.print(led.getColor().r);
+  Serial.print(",");
+  Serial.print(led.getColor().g);
+  Serial.print(",");
+  Serial.print(led.getColor().b);
+  Serial.print(",");
+  Serial.println(led.getBrightness());
+}
+#endif
 
 /*
  * Gestion du BLE
