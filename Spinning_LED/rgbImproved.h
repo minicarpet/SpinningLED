@@ -21,6 +21,7 @@ class rgbImproved {
     void apply(int r, int g, int b);
     void apply(rgb values);
     void apply(int val);
+    void applySmooth(int val);
     rgb getColor();
   private:
     unsigned char _pinRed;
