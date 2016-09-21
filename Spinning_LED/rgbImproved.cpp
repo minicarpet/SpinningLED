@@ -79,7 +79,7 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
       delay(time_transition/nb_pas);
     }
   } else {
-    for(unsigned int i=lastColor ; i>=color_fin ; i = i - ecart) {
+    for(unsigned int i=lastColor ; i>color_fin ; i = i - ecart) {
       apply(i);
       delay(time_transition/nb_pas);
     }
