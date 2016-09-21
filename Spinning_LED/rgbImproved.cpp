@@ -67,47 +67,22 @@ void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED ave
   color_map(val);
 }
 
-void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition) {
+void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint32_t time_transition) {
   if(lastColor == color_fin) {
     return;
   }
-  unsigned char ecart = lastColor-color_fin;
-  if (abs(ecart>128)){
-    ecart = -1*(255 % ecart);
-  }
-  unsigned int delai = time_transition*1000/nb_pas;
-  if(time_transition*1000/nb_pas == 0) {
-    delai = 1;
-  }
-  unsigned int inc_ecart = ecart/nb_pas;
-  int current_color=0;
-  for(unsigned char i=0; i<nb_pas;i++){
-    current_color=lastColor+inc_ecart*i;
-    apply(current_color);
-    delay(delai);
-  }
-}
-
-void rgbImproved::applySmoothLogan(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition) {
-  if(lastColor == color_fin) {
-    return;
-  }
-  Serial.print("time_transition : ");
-  Serial.println(time_transition);
-  Serial.print("colorDebut : ");
-  Serial.println(lastColor);
-  Serial.print("color_fin : ");
-  Serial.println(color_fin);
-  unsigned char ecart = color_fin-lastColor;
-  Serial.print("ecart : ");
-  Serial.println(ecart);
+  unsigned char ecart = abs(color_fin-lastColor);
   ecart /= nb_pas;
-  Serial.print("ecart apres calcul : ");
-  Serial.println(ecart);
-  for(int i=lastColor ; i<=color_fin ; i+ecart) {
-    Serial.println(i);
-    apply(i);
-    delay(time_transition*100);
+  if(color_fin > lastColor) {
+    for(unsigned int i=lastColor ; i<=color_fin ; i = i + ecart) {
+      apply(i);
+      delay(time_transition/nb_pas);
+    }
+  } else {
+    for(unsigned int i=lastColor ; i>=color_fin ; i = i - ecart) {
+      apply(i);
+      delay(time_transition/nb_pas);
+    }
   }
   if(lastColor != color_fin) {
     apply(color_fin);

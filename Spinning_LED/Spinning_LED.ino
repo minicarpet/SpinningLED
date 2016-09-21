@@ -53,12 +53,11 @@ void setup() {
   pinMode(13, OUTPUT); /* LED on pin 13 use to know if BLE is connected or not On : connected */
   digitalWrite(13, LOW);
   led.setBrightness(100); /* Par defaut : 255 (max) */
-
-  led.applySmoothLogan(100, 100, 10);
-  Serial.println("TEST1 DONE");
+  led.apply(0);
   delay(1000);
-  led.applySmooth(100, 10, 10);
-  Serial.println("TEST2 DONE");
+  led.applySmooth(100, 100, 1000);
+  delay(1000);
+  led.applySmooth(0, 10, 20000);
   delay(2000);
 
 }

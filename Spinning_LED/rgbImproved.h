@@ -23,8 +23,7 @@ class rgbImproved {
     void apply(int r, int g, int b);
     void apply(rgb values);
     void apply(int val);
-    void applySmooth(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition);
-    void applySmoothLogan(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition);
+    void applySmooth(unsigned char color_fin, unsigned int nb_pas, uint32_t time_transition);
     rgb getColorRGB();
     unsigned char getColor();
     #ifdef Monitoring
