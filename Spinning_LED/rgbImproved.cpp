@@ -67,13 +67,59 @@ void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED ave
   color_map(val);
 }
 
-void rgbImproved::applySmooth(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
-  //MET TA FONCTION SMOOTH POUR LE CHANGEMENT DE COULEUR ICI ENCULER
-  //TU PEUX UTILISER LA VARIABLE lastColor QUI ENREGISTRE LA DERNIERE VALEUR UTILISE
+void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition) {
+  if(lastColor == color_fin) {
+    return;
+  }
+  unsigned char ecart = lastColor-color_fin;
+  if (abs(ecart>128)){
+    ecart = -1*(255 % ecart);
+  }
+  unsigned int delai = time_transition*1000/nb_pas;
+  if(time_transition*1000/nb_pas == 0) {
+    delai = 1;
+  }
+  unsigned int inc_ecart = ecart/nb_pas;
+  int current_color=0;
+  for(unsigned char i=0; i<nb_pas;i++){
+    current_color=lastColor+inc_ecart*i;
+    apply(current_color);
+    delay(delai);
+  }
 }
 
-rgb rgbImproved::getColor() { /* Recuperation des couleurs RGB */
+void rgbImproved::applySmoothLogan(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition) {
+  if(lastColor == color_fin) {
+    return;
+  }
+  Serial.print("time_transition : ");
+  Serial.println(time_transition);
+  Serial.print("colorDebut : ");
+  Serial.println(lastColor);
+  Serial.print("color_fin : ");
+  Serial.println(color_fin);
+  unsigned char ecart = color_fin-lastColor;
+  Serial.print("ecart : ");
+  Serial.println(ecart);
+  ecart /= nb_pas;
+  Serial.print("ecart apres calcul : ");
+  Serial.println(ecart);
+  for(int i=lastColor ; i<=color_fin ; i+ecart) {
+    Serial.println(i);
+    apply(i);
+    delay(time_transition*100);
+  }
+  if(lastColor != color_fin) {
+    apply(color_fin);
+  }
+}
+
+rgb rgbImproved::getColorRGB() { /* Recuperation des couleurs RGB */
   return LED;
+}
+
+unsigned char rgbImproved::getColor() { /* Recuperation des couleurs RGB */
+  return lastColor;
 }
 
 rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (de HSV) */
@@ -81,6 +127,7 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   int r_out=0;
   int g_out=0;
   int b_out=0;
+  lastColor = color_index;
   
   if (color_index >=0 && color_index<42) {
     r_out=255;
@@ -124,7 +171,22 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   analogWrite(_pinRed, out.r);
   analogWrite(_pinGreen, out.g);
   analogWrite(_pinBlue, out.b);
+
+  #ifdef Monitoring
+  sendMonitoring();
+  #endif
   
   return out;
 }
 
+#ifdef Monitoring
+void rgbImproved::sendMonitoring() {
+  Serial.print(getColorRGB().r);
+  Serial.print(",");
+  Serial.print(getColorRGB().g);
+  Serial.print(",");
+  Serial.print(getColorRGB().b);
+  Serial.print(",");
+  Serial.println(getBrightness());
+}
+#endif

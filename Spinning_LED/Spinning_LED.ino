@@ -14,9 +14,12 @@
  */
 
 #include "rgbImproved.h" /* Librairie d'utilisation d'une LED RGB */
-#include <CurieBLE.h> /* Module BLE a modifier pour la carte ADA */
 
-#define Monitoring /* Active le monitoring en decommentant cette ligne */
+/*
+ * Gestion du BLE
+ */
+ 
+#include <CurieBLE.h> /* Module BLE a modifier pour la carte ADA */
 
 BLEPeripheral blePeripheral; /* instantiation du module BLE */
 
@@ -24,10 +27,14 @@ BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); /* instantiation 
 
 BLECharacteristic ledChar("19B10001-E8F2-537E-4F6C-D104768A1214", BLEWrite, 20); /* instantiation des characteristique */
 
-unsigned long int timeout = 10000;
-unsigned long int Time = 10000;
+/*
+ * Utilities for monitoring
+ */
 
-bool autoMode = true; /* Booleen pour differencier les modes : Future use */
+#ifdef Monitoring
+unsigned long int timeout = 10000; /* Timeout to check connection on Serial port */
+unsigned long int Time = 10000;
+#endif
 
 rgbImproved led(9, 6, 3);
 
@@ -43,38 +50,28 @@ void setup() {
   }
   Serial.println("Monitoring on");
   #endif
-  pinMode(13, OUTPUT);
+  pinMode(13, OUTPUT); /* LED on pin 13 use to know if BLE is connected or not On : connected */
   digitalWrite(13, LOW);
   led.setBrightness(100); /* Par defaut : 255 (max) */
+
+  led.applySmoothLogan(100, 100, 10);
+  Serial.println("TEST1 DONE");
+  delay(1000);
+  led.applySmooth(100, 10, 10);
+  Serial.println("TEST2 DONE");
+  delay(2000);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   for(int i=0 ; i<256 ; i++) { /* Test de toutes les valeurs possible en boucle en utilisant le fonction de PY */
-    #ifdef Monitoring
-    sendMonitoring();
-    #endif
     led.apply(i);
+    Serial.println(led.getColor());
     delay(20);
   }
-  //led.setOn(!led.getOn());
+  led.setOn(!led.getOn());
 }
-
-
-
-
-#ifdef Monitoring
-void sendMonitoring() {
-  Serial.print(led.getColor().r);
-  Serial.print(",");
-  Serial.print(led.getColor().g);
-  Serial.print(",");
-  Serial.print(led.getColor().b);
-  Serial.print(",");
-  Serial.println(led.getBrightness());
-}
-#endif
 
 /*
  * Gestion du BLE

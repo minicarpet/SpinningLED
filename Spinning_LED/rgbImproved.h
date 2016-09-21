@@ -5,6 +5,8 @@
 
 #include "Arduino.h"
 
+#define Monitoring /* Active le monitoring en decommentant cette ligne */
+
 typedef struct{
   unsigned char r = 0;
   unsigned char g = 0;
@@ -21,8 +23,13 @@ class rgbImproved {
     void apply(int r, int g, int b);
     void apply(rgb values);
     void apply(int val);
-    void applySmooth(int val);
-    rgb getColor();
+    void applySmooth(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition);
+    void applySmoothLogan(unsigned char color_fin, unsigned int nb_pas, uint8_t time_transition);
+    rgb getColorRGB();
+    unsigned char getColor();
+    #ifdef Monitoring
+    void sendMonitoring();
+    #endif
   private:
     unsigned char _pinRed;
     unsigned char _pinGreen;
