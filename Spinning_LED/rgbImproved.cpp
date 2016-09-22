@@ -75,14 +75,27 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
   ecart /= nb_pas;
   if(ecart > 127) {
     ecart -= 256;
-    for(float i=lastColor ; i>=0 ; i = i - ecart) {
-      apply(i);
-      delay(time_transition/nb_pas);
-    }
-    for(float i=255 ; i>color_fin ; i = i - ecart) {
-      if(i>color_fin) {
+    if(lastColor>127) {
+      for(float i=lastColor ; i<256 ; i = i + ecart) {
         apply(i);
         delay(time_transition/nb_pas);
+      }
+      for(float i=0 ; i<=color_fin ; i = i + ecart) {
+        if(i<=color_fin) {
+          apply(i);
+          delay(time_transition/nb_pas);
+        }
+      }
+    } else {
+      for(float i=lastColor ; i>=0 ; i = i - ecart) {
+        apply(i);
+        delay(time_transition/nb_pas);
+      }
+      for(float i=255 ; i>color_fin ; i = i - ecart) {
+        if(i>color_fin) {
+          apply(i);
+          delay(time_transition/nb_pas);
+        }
       }
     }
   } else {
