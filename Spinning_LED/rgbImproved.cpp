@@ -170,13 +170,7 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   out.g = out.g*(brightness/255.0);
   out.b = out.b*(brightness/255.0);
 
-  LED = out;
-
-  if(!_on) { return LED;}
-
-  analogWrite(_pinRed, out.r);
-  analogWrite(_pinGreen, out.g);
-  analogWrite(_pinBlue, out.b);
+  apply(out);
 
   #ifdef Monitoring
   sendMonitoring();
