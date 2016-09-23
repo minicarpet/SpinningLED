@@ -1,7 +1,7 @@
 /* 25.08.2016 -- RGB spinning LED ball
- * Pierre-Yves Bloqueau/Logan Gallois (jte beze)
+ * Pierre-Yves Bloqueau/Logan Gallois
  * ----Etat d'avancement: x- fait o- à faire
- * o-lien entre appli android et arduino
+ * o-lien entre appli android/iOS et arduino
  *  o- distinction entre mode auto et manuel
  *    o-codage mode auto
  *      x- Look up-table: 1int-->3int rgb
@@ -55,9 +55,15 @@ void setup() {
   led.setBrightness(100); /* Par defaut : 255 (max) */
   led.apply(0);
   delay(1000);
-  led.applySmooth(100, 100, 1000);
+  Serial.println(millis());
+  led.applySmooth(128, 100, 10000);
+  Serial.println(millis());
   delay(1000);
-  led.applySmooth(0, 10, 20000);
+  led.applySmooth(0, 10, 10000);
+  delay(2000);
+  led.applySmooth(200, 1000, 20000);
+  delay(2000);
+  led.applySmooth(10, 200, 5000);
   delay(2000);
 
 }

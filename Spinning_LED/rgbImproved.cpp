@@ -12,6 +12,12 @@ rgbImproved::rgbImproved(unsigned char pinRed, unsigned char pinGreen, unsigned 
   apply(LED);
 }
 
+rgbImproved::rgbImproved(unsigned char _numled, TLC59711 _driverPWM) { /* Initialisation de la classe */
+  numled = _numled;
+  driverPWM = _driverPWM;
+  apply(LED);
+}
+
 /*
  * Mettre a 1 pour allumer la LED et a 0 pour l'eteindre
  * Il est aussi possible d'eteindre la led en mettant la luminosite a 0
@@ -47,9 +53,13 @@ void rgbImproved::apply(int r, int g, int b) { /* Mise a jour des valeurs PWMs d
   LED.g = g*(brightness/255.0);
   LED.b = b*(brightness/255.0);
   if(!_on) { return;}
-  analogWrite(_pinRed, LED.r);
-  analogWrite(_pinGreen, LED.g);
-  analogWrite(_pinBlue, LED.b);
+  if(_pinRed >= 0) {
+    analogWrite(_pinRed, LED.r);
+    analogWrite(_pinGreen, LED.g);
+    analogWrite(_pinBlue, LED.b);
+  } else {
+    driverPWM.setLED(numled, map(LED.r, 0, 255, 0, 65535), map(LED.g, 0, 255, 0, 65535), map(LED.b, 0, 255, 0, 65535));
+  }
 }
 
 void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
@@ -57,9 +67,13 @@ void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED 
   LED.g = values.g*(brightness/255.0);
   LED.b = values.b*(brightness/255.0);
   if(!_on) { return;}
-  analogWrite(_pinRed, LED.r);
-  analogWrite(_pinGreen, LED.g);
-  analogWrite(_pinBlue, LED.b);
+  if(_pinRed >= 0) {
+    analogWrite(_pinRed, LED.r);
+    analogWrite(_pinGreen, LED.g);
+    analogWrite(_pinBlue, LED.b);
+  } else {
+    driverPWM.setLED(numled, map(LED.r, 0, 255, 0, 65535), map(LED.g, 0, 255, 0, 65535), map(LED.b, 0, 255, 0, 65535));
+  }
 }
 
 void rgbImproved::apply(int val) { /* Mise a jour des valeurs PWMs de la LED avec une valeur unique (utilise la fonction de PY) */
@@ -72,22 +86,17 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
     return;
   }
   float ecart = abs(color_fin-lastColor);
-  ecart /= nb_pas;
   if(ecart > 127) {
     ecart -= 256;
+    ecart *= -1;
+    ecart /= nb_pas;
     if(lastColor>127) {
-      for(float i=lastColor ; i<256 ; i = i + ecart) {
-        apply(i);
+      for(float i=lastColor ; i<(256+color_fin) ; i = i + ecart) {
+        apply(round(i)%255);
         delay(time_transition/nb_pas);
       }
-      for(float i=0 ; i<=color_fin ; i = i + ecart) {
-        if(i<=color_fin) {
-          apply(i);
-          delay(time_transition/nb_pas);
-        }
-      }
     } else {
-      for(float i=lastColor ; i>=0 ; i = i - ecart) {
+      for(float i=lastColor ; i>0 ; i = i - ecart) {
         apply(i);
         delay(time_transition/nb_pas);
       }
@@ -99,6 +108,7 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
       }
     }
   } else {
+    ecart /= nb_pas;
     if(color_fin > lastColor) {
       for(float i=lastColor ; i<=color_fin ; i = i + ecart) {
         if(i<=color_fin) {
