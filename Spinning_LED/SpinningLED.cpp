@@ -16,3 +16,27 @@ SpinningLED::SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char
   led2 = rgbImproved(_led3, driverPWM);
 }
 
+SpinningLED::SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char _led3) {
+  led0 = rgbImproved(_led1, _led2, _led3);
+  led0.setBrightness(100); /* Par defaut : 255 (max) */
+}
+
+void SpinningLED::setMode(SpinningLEDMode mode) {
+  actual = mode;
+}
+
+void SpinningLED::poll() {
+  switch(actual) {
+    case 0:
+      randomSeed(analogRead(0));
+      led0.applySmooth(random(256), random(20, 400), random(400, 10000));
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
+}
+

@@ -49,9 +49,9 @@ unsigned char rgbImproved::getBrightness() { /* Recuperation de la luminosite de
 }
 
 void rgbImproved::apply(int r, int g, int b) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
-  LED.r = r*(brightness/255.0);
-  LED.g = g*(brightness/255.0);
-  LED.b = b*(brightness/255.0);
+  LED.r = map(r, 0, 255, 0, brightness);
+  LED.g = map(g, 0, 255, 0, brightness);
+  LED.b = map(b, 0, 255, 0, brightness);
   if(!_on) { return;}
   if(_pinRed >= 0) {
     analogWrite(_pinRed, LED.r);
@@ -63,9 +63,9 @@ void rgbImproved::apply(int r, int g, int b) { /* Mise a jour des valeurs PWMs d
 }
 
 void rgbImproved::apply(rgb values) { /* Mise a jour des valeurs PWMs de la LED avec la structure RGB (3 valeurs) */
-  LED.r = values.r*(brightness/255.0);
-  LED.g = values.g*(brightness/255.0);
-  LED.b = values.b*(brightness/255.0);
+  LED.r = map(values.r, 0, 255, 0, brightness);
+  LED.g = map(values.g, 0, 255, 0, brightness);
+  LED.b = map(values.b, 0, 255, 0, brightness);
   if(!_on) { return;}
   if(_pinRed >= 0) {
     analogWrite(_pinRed, LED.r);
@@ -85,6 +85,12 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
   if(lastColor == color_fin) {
     return;
   }
+  Serial.print("color_fin : ");
+  Serial.println(color_fin);
+  Serial.print("nb_pas : ");
+  Serial.println(nb_pas);
+  Serial.print("time_transition : ");
+  Serial.println(time_transition);
   float ecart = abs(color_fin-lastColor);
   if(ecart > 127) {
     ecart -= 256;
@@ -147,25 +153,25 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   
   if (color_index >=0 && color_index<42) {
     r_out=255;
-    g_out=map(color_index, 0, 42, 0, 255); 
+    g_out=map(color_index, 0, 41, 0, 255); 
     b_out= 0;
   } else if (color_index >=42 && color_index<85) {
-    r_out=map(color_index, 42, 85, 255, 0);
+    r_out=map(color_index, 42, 84, 255, 0);
     g_out=255;
     b_out=0;
   } else if (color_index >=85 && color_index<127) {
     r_out=0;
     g_out=255;
-    b_out=map(color_index, 85, 127, 0, 255);   
+    b_out=map(color_index, 85, 126, 0, 255);   
   } else if (color_index >=127 && color_index<170) {
     r_out=0;
-    g_out=map(color_index, 127, 170, 255, 0);
+    g_out=map(color_index, 127, 169, 255, 0);
     b_out=255;
   } else if (color_index >=170 && color_index<212) {
-    r_out=map(color_index, 170, 212, 0, 255);
+    r_out=map(color_index, 170, 211, 0, 255);
     g_out=0;
     b_out=255;
-  } else if (color_index >=170 && color_index<=255) {
+  } else if (color_index >=212 && color_index<=255) {
     r_out=255;
     g_out=0;
     b_out=map(color_index, 212, 255, 255, 0);
@@ -175,10 +181,6 @@ rgb rgbImproved::color_map(int color_index) { /* Fonction de PY : couleur Hue (d
   out.r=r_out;
   out.g=g_out;
   out.b=b_out;
-
-  out.r = out.r*(brightness/255.0);
-  out.g = out.g*(brightness/255.0);
-  out.b = out.b*(brightness/255.0);
 
   apply(out);
 
@@ -197,6 +199,8 @@ void rgbImproved::sendMonitoring() {
   Serial.print(",");
   Serial.print(getColorRGB().b);
   Serial.print(",");
-  Serial.println(getBrightness());
+  Serial.print(getBrightness());
+  Serial.print(",");
+  Serial.println(getColor());
 }
 #endif
