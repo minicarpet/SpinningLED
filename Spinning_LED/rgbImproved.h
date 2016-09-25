@@ -6,7 +6,7 @@
 #include "Arduino.h"
 #include "TLC59711.h" /* Gestion des drivers PWM */
 
-#define Monitoring /* Active le monitoring en decommentant cette ligne */
+//#define Monitoring /* Active le monitoring en decommentant cette ligne */
 
 typedef struct{
   unsigned char r = 0;

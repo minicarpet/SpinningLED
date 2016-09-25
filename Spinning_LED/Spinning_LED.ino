@@ -36,7 +36,6 @@ unsigned long int timeout = 10000; /* Timeout to check connection on Serial port
 unsigned long int Time = 10000;
 #endif
 
-rgbImproved led(9, 6, 3);
 SpinningLED spinningLED(9, 6, 3);
 
 void setup() {
@@ -111,7 +110,6 @@ const unsigned char* tocstChar(String entry) {
 void ledCharacteristicWritten(BLECentral& central, BLECharacteristic& characteristic) {
   // central wrote new value to characteristic, update LED
   String In = toString(ledChar.value(), ledChar.valueLength());
-  rgb newLed;
-  newLed.r = In.toInt();
-  led.apply(newLed);
+  if(Contains(In, "Brightness")) {
+    In.remove(0, String("Brightness").length());
 }

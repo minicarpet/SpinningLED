@@ -19,11 +19,14 @@ class SpinningLED {
     SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char _led3, unsigned char pin1, unsigned char pin2, unsigned char pin3, unsigned char pin4, unsigned char pin5, unsigned char pin6);
     SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char _led3);
     void setMode(SpinningLEDMode mode);
+    void setBrightness(unsigned char brightness);
     void poll();
+    void setColor(unsigned char _color);
   private:
     L293_twoWire motor0 = L293_twoWire(0,0);
     L293_twoWire motor1 = L293_twoWire(0,0);
     L293_twoWire motor2 = L293_twoWire(0,0);
+    unsigned char color = 0;
     rgbImproved led0;
     rgbImproved led1;
     rgbImproved led2;
