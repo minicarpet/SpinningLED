@@ -122,6 +122,30 @@ void ledCharacteristicWritten(BLECentral& central, BLECharacteristic& characteri
   if(Contains(In, "Brightness")) {
     In.remove(0, String("Brightness").length());
     spinningLED.setBrightness(In.toInt());
+  } else if(Contains(In, "Color")) {
+    In.remove(0, String("Color").length());
+    spinningLED.setColor(In.toInt());
+  } else if(Contains(In, "onLed")) {
+    In.remove(0, String("onLed").length());
+    spinningLED.setLedOn(0, bool(In.toInt()));
+  } else if(Contains(In, "Mode")) {
+    In.remove(0, String("Mode").length());
+    switch(In.toInt()) {
+      case 0:
+        spinningLED.setMode(fullAuto);
+        break;
+      case 1:
+        spinningLED.setMode(ledAuto);
+        break;
+      case 2:
+        spinningLED.setMode(motAuto);
+        break;
+      case 3:
+        spinningLED.setMode(fullControlled);
+        break;
+      default:
+        break;
+    }
   } else {
     
   }

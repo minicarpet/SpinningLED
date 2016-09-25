@@ -50,3 +50,7 @@ void SpinningLED::setBrightness(unsigned char brightness) {
   led0.setBrightness(brightness);
 }
 
+void SpinningLED::setLedOn(unsigned char numLed, bool on) {
+  led0.setOn(on);
+}
+

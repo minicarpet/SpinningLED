@@ -22,6 +22,7 @@ class SpinningLED {
     void setBrightness(unsigned char brightness);
     void poll();
     void setColor(unsigned char _color);
+    void setLedOn(unsigned char numLed, bool on);
   private:
     L293_twoWire motor0 = L293_twoWire(0,0);
     L293_twoWire motor1 = L293_twoWire(0,0);

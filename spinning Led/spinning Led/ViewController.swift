@@ -13,7 +13,7 @@ let Modes = [
     "fullAuto",
     "ledAuto",
     "motAuto",
-    "motAuto"
+    "fullControlled"
 ]
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -51,6 +51,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func validate() {
         if modeSelect.isEditing {
             modeSelect.resignFirstResponder()
+            myPeripheral?.writeValue(("Mode" + String(Int(Modes.index(of: modeSelect.text!)!))).data(using: String.Encoding.ascii)!, for: RxCarac!, type: .withResponse)
         }
     }
     
@@ -63,7 +64,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     @IBAction func onLed(_ sender: UISwitch) {
-        myPeripheral?.writeValue(("onLed" + String(sender.isOn)).data(using: String.Encoding.ascii)!, for: RxCarac!, type: .withResponse)
+        myPeripheral?.writeValue(("onLed" + String(sender.isOn.hashValue)).data(using: String.Encoding.ascii)!, for: RxCarac!, type: .withResponse)
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {

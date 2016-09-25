@@ -85,12 +85,14 @@ void rgbImproved::applySmooth(unsigned char color_fin, unsigned int nb_pas, uint
   if(lastColor == color_fin) {
     return;
   }
+  #ifdef Monitoring
   Serial.print("color_fin : ");
   Serial.println(color_fin);
   Serial.print("nb_pas : ");
   Serial.println(nb_pas);
   Serial.print("time_transition : ");
   Serial.println(time_transition);
+  #endif
   float ecart = abs(color_fin-lastColor);
   if(ecart > 127) {
     ecart -= 256;
