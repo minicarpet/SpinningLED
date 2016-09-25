@@ -52,6 +52,7 @@ void setup() {
   #endif
   pinMode(13, OUTPUT); /* LED on pin 13 use to know if BLE is connected or not On : connected */
   digitalWrite(13, LOW);
+  initBLE();
 
 }
 
@@ -107,9 +108,21 @@ const unsigned char* tocstChar(String entry) {
   return Out;
 }
 
+bool Contains( String s, String search) {
+  int max = s.length() - search.length(); // the searchstring has to fit in the other one  
+  for (int i=0; i<= max; i++) {
+    if (s.substring(i, i+search.length()) == search) return true;
+  }
+  return false;
+}
+
 void ledCharacteristicWritten(BLECentral& central, BLECharacteristic& characteristic) {
   // central wrote new value to characteristic, update LED
   String In = toString(ledChar.value(), ledChar.valueLength());
   if(Contains(In, "Brightness")) {
     In.remove(0, String("Brightness").length());
+    spinningLED.setBrightness(In.toInt());
+  } else {
+    
+  }
 }
