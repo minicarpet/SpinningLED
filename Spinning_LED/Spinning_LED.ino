@@ -50,7 +50,7 @@ void setup() {
   }
   Serial.println("Monitoring on");
   #endif
-  pinMode(13, OUTPUT); /* LED on pin 13 use to know if BLE is connected or not On : connected */
+  pinMode(13, OUTPUT); /* LED on pin 13 is used to know if BLE is connected or not, if led is On : connected */
   digitalWrite(13, LOW);
   initBLE();
 
