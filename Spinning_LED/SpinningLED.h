@@ -5,7 +5,6 @@
 
 #include "rgbImproved.h" /* Librairie d'utilisation d'une LED RGB */
 #include "L293.h" /* Gestion des moteurs */
-#include "TaskScheduler.h"
 
 typedef enum {
   fullAuto = 0,
@@ -34,12 +33,5 @@ class SpinningLED {
     rgbImproved led2;
     TLC59711 driverPWM;
     SpinningLEDMode actual = fullAuto;
-    void functionCallbackLed0();
-    void functionCallbackLed1();
-    void functionCallbackLed2();
-    Scheduler schedule;
-    Task led0Task;
-    Task led1Task;
-    Task led2Task;
 };
 

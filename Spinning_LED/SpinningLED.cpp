@@ -14,8 +14,6 @@ SpinningLED::SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char
   led0 = rgbImproved(_led1, driverPWM);
   led1 = rgbImproved(_led2, driverPWM);
   led2 = rgbImproved(_led3, driverPWM);
-  led0Task.setInterval(350);
-  led0Task.set(100, TASK_ONCE, &SpinningLED::functionCallbackLed0)
 }
 
 SpinningLED::SpinningLED(unsigned char _led1, unsigned char _led2, unsigned char _led3) {
@@ -31,23 +29,12 @@ void SpinningLED::poll() {
   randomSeed(analogRead(0));
   switch(actual) {
     case fullAuto:
-      /*if(!led0Task.isEnabled()) {
-        led0Task.enable();
-      }
-      if(!led1Task.isEnabled()) {
-        led0Task.enable();
-      }
-      if(!led2Task.isEnabled()) {
-        led0Task.enable();
-      }*/
-      schedule.enableAll(true);
-      schedule.execute();
+      led0.applySmooth(random(256), random(20, 400), random(400, 10000));
       break;
     case ledAuto:
       led0.applySmooth(random(256), random(20, 400), random(400, 10000));
       break;
     case motAuto:
-      schedule.enableAll(false);
       led0.applySmooth(color, random(20, 400), random(400, 10000));
       break;
     default:
@@ -65,17 +52,5 @@ void SpinningLED::setBrightness(unsigned char brightness) {
 
 void SpinningLED::setLedOn(unsigned char numLed, bool on) {
   led0.setOn(on);
-}
-
-void SpinningLED::functionCallbackLed0() {
-  led0.applySmooth(random(256), random(20, 400), random(400, 10000));
-}
-
-void SpinningLED::functionCallbackLed1() {
-  Serial.println("Executed cellback for led1");
-}
-
-void SpinningLED::functionCallbackLed2() {
-  Serial.println("Executed cellback for led2");
 }
 
